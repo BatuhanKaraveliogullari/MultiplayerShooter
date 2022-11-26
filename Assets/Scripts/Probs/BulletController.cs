@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -9,26 +10,23 @@ public class BulletController : NetworkBehaviour, IColor
     private NetworkVariable<Color> NetColor = new();
     [SerializeField] private float bulletSpeed = 1f;
     [SerializeField] private MeshRenderer bulletMeshRenderer;
+    [SerializeField] private LayerMask targetLayer;
     private Vector3 bulletDirection;
-    private BulletColor bulletColor;
-    private BulletSize bulletSize;
-    private Color playerColor;
     private Transform _transform;
+    private NetworkPlayerData currentPlayerData;
 
     public void InitBullet(NetworkPlayerData playerData, Vector3 direction)
     {
+        Debug.Log("Client " + playerData.clientID);
+        currentPlayerData = playerData;
         bulletDirection = direction;
-        bulletColor = playerData.currentBulletColor;
-        bulletSize = playerData.currentBulletSize;
-        playerColor = playerData.playerColor;
         _transform = transform;
-        //Set Size and Color here
         if (IsOwner)
         {
-            CommitColorServerRpc(ColorUtils.GetColorWithEnum(bulletColor));
+            CommitColorServerRpc(ColorUtils.GetColorWithEnum(currentPlayerData.currentBulletColor));
         }
-        bulletMeshRenderer.material.color = ColorUtils.GetColorWithEnum(bulletColor);
-        _transform.localScale = VectorUtils.GetScaleWithEnum(bulletSize);
+        bulletMeshRenderer.material.color = ColorUtils.GetColorWithEnum(currentPlayerData.currentBulletColor);
+        _transform.localScale = VectorUtils.GetScaleWithEnum(currentPlayerData.currentBulletSize);
         InvokeRepeating(nameof(MoveBullet), 0, Time.deltaTime);
     }
 
@@ -41,5 +39,14 @@ public class BulletController : NetworkBehaviour, IColor
     public void CommitColorServerRpc(Color color)
     {
         NetColor.Value = color;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if((1 << other.gameObject.layer & targetLayer) != 0)
+        {
+            other.GetComponent<TargetController>().HitTarget(currentPlayerData);
+            Destroy(gameObject);
+        }    
     }
 }

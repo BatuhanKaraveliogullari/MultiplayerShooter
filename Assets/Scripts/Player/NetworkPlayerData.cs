@@ -21,6 +21,7 @@ public struct NetworkPlayerData : INetworkSerializable
     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
     {
         serializer.SerializeValue(ref playerColor);
+        serializer.SerializeValue(ref clientID);
         serializer.SerializeValue(ref currentBulletColor);
         serializer.SerializeValue(ref currentBulletSize);
     }

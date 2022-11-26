@@ -46,6 +46,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1136394996140266239, guid: c3cac1648311c714e8567716decc3fcd, type: 3}
+  targetManager: {fileID: 4004868704452453806, guid: 3dec2a97d4fc3d944b24aeae1961974a, type: 3}
+  targetController: {fileID: 8627407721939543008, guid: 2d54a887f6d4b154aa2a00c1bfdfdca0, type: 3}
+  targetCount: 25
 --- !u!114 &3356000623962897795
 MonoBehaviour:
   m_ObjectHideFlags: 0

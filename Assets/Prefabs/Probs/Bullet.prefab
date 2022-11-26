@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1535198593385903563}
   - component: {fileID: 1535198593385903562}
   - component: {fileID: 1535198593385903557}
-  - component: {fileID: 1535198593385903556}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -84,19 +83,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1535198593385903556
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1535198593385903559}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2603802438969101327
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,6 +95,8 @@ GameObject:
   - component: {fileID: -1159474746918056094}
   - component: {fileID: -2360616276389138388}
   - component: {fileID: 2676207803747461331}
+  - component: {fileID: 7471444588182469783}
+  - component: {fileID: 3349010050725451486}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -186,5 +174,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3dc006139ad7e2f4f8efc424780e3784, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletSpeed: 15
+  bulletSpeed: 30
   bulletMeshRenderer: {fileID: 1535198593385903557}
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 256
+--- !u!54 &7471444588182469783
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603802438969101327}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 2
+  m_Constraints: 0
+  m_CollisionDetection: 1
+--- !u!135 &3349010050725451486
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2603802438969101327}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.05
+  m_Center: {x: 0, y: 0, z: 0}
