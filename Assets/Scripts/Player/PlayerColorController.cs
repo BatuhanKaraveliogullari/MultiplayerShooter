@@ -2,9 +2,9 @@ using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerColorController : NetworkBehaviour 
+public class PlayerColorController : PlayerController, IColor
 {
-    private readonly NetworkVariable<Color> _netColor = new();
+    private readonly NetworkVariable<Color> netPlayerColor = new();
     [SerializeField] private MeshRenderer playerColor;
     [SerializeField] private MeshRenderer gunColor;
 
@@ -12,16 +12,15 @@ public class PlayerColorController : NetworkBehaviour
     {
         if (IsOwner) 
         {
-            CommitNetworkColorServerRpc(ColorUtils.GetColorForClient((int)OwnerClientId));
+            CommitColorServerRpc(ColorUtils.GetColorForClient((int)OwnerClientId));
         }
         playerColor.material.color = ColorUtils.GetColorForClient((int)OwnerClientId);
         gunColor.material.color = ColorUtils.GetColorForClient((int)OwnerClientId);  
     }
     
-
     [ServerRpc]
-    private void CommitNetworkColorServerRpc(Color color)
+    public void CommitColorServerRpc(Color color)
     {
-        _netColor.Value = color;
+        netPlayerColor.Value = color;
     }
 }

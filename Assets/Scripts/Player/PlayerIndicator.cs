@@ -25,6 +25,6 @@ public class PlayerIndicator : MonoBehaviour
     {
         if (!networkObject.IsOwner) return;
         indicatorImage.color = playerData.playerColor;
-        playerNameText.text = playerData.playerName;
+        playerNameText.text = playerData.playerID.ToString();
     }
 }

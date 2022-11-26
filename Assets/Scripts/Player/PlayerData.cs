@@ -1,13 +1,32 @@
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerData
 {
     public Color playerColor;
-    public string playerName;
+    public ulong playerID;
+    public BulletColor currentBulletColor;
+    public BulletSize currentBulletSize;
 
-    public PlayerData(int clientID)
+    public PlayerData(ulong clientID)
     {
-        playerColor = ColorUtils.GetColorForClient(clientID);
-        playerName = "Player " + clientID.ToString();
+        playerColor = ColorUtils.GetColorForClient((int)clientID);
+        playerID = clientID;
+        currentBulletColor = BulletColor.Blue;
+        currentBulletSize = BulletSize.Large;
+        GlobalEventManager.OnClientBulletColorChanged += ClientColorChanged;
+        GlobalEventManager.OnClientBulletSizeChanged += ClientSizeChanged;
+    }
+
+    private void ClientSizeChanged(BulletSize newSize)
+    {
+        Debug.Log(" Client is changed size (" + newSize + ") ");
+        currentBulletSize = newSize;
+    }
+
+    private void ClientColorChanged(BulletColor newColor)
+    {
+        Debug.Log(" Client is changed color (" + newColor + ") ");
+        currentBulletColor = newColor;
     }
 }
