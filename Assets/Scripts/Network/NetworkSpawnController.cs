@@ -8,29 +8,6 @@ public class NetworkSpawnController : NetworkBehaviour
 {
     public GameObject playerPrefab;
     public GameObject targetManager;
-    public GameObject targetController;
-    public int targetCount;
-    private int destroyedTargetCount = 0;
-
-    private void OnEnable()
-    {
-        GlobalEventManager.OnTargetDestroyed += OnTargetDestroyed;
-    }
-
-    private void OnDisable()
-    {
-        GlobalEventManager.OnTargetDestroyed -= OnTargetDestroyed;
-    }
-
-    private void OnTargetDestroyed(NetworkPlayerData networkPlayerData)
-    {
-        Debug.Log(" Target destroyed by " + networkPlayerData.clientID);
-        destroyedTargetCount++;
-        if (destroyedTargetCount >= targetCount)
-        {
-            RequestTargetOnlyServerRpc();
-        }
-    }
 
     public override void OnNetworkSpawn()
     {
@@ -40,8 +17,7 @@ public class NetworkSpawnController : NetworkBehaviour
         RequestPlayerSpawnServerRpc(OwnerClientId);
         if (IsHost)
         {
-            //RequestTargetsServerRpc();
-            RequestTargetOnlyServerRpc();
+            RequestTargetsServerRpc();
         }
     }
 
@@ -58,15 +34,5 @@ public class NetworkSpawnController : NetworkBehaviour
     {
         var go = Instantiate(targetManager);
         go.GetComponent<NetworkObject>().Spawn();
-    }
-    
-    [ServerRpc]
-    public void RequestTargetOnlyServerRpc()
-    {
-        for (int i = 0; i < targetCount; i++)
-        {
-            var var = Instantiate(targetController, new Vector3(Random.Range(-30,30), 0, Random.Range(-30,30)), Quaternion.identity);
-            var.GetComponent<NetworkObject>().Spawn();
-        }
     }
 }

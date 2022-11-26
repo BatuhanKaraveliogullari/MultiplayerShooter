@@ -4,32 +4,46 @@ using UnityEngine;
 
 public class TargetManager : NetworkBehaviour
 {
-    [SerializeField] private List<TargetController> targets = new List<TargetController>();
-    private int hitCount = 0;
-
-    [ServerRpc]
-    public void OnTargetHitServerRpc(int index, NetworkPlayerData networkPlayerData)
+    public GameObject targetController;
+    public int targetCount;
+    private int destroyedTargetCount = 0;
+    
+    private void OnEnable()
     {
-        GameObject tempGo = targets[index].gameObject;
-        targets.RemoveAt(index);
-        Destroy(tempGo);
-        //hitCount++;
-        // //Update Leaderboard.
-        // if (hitCount >= targets.Count)
-        // {
-        //     //Restart Level
-        //     ActiveAllTargetsServerRpc();
-        //     hitCount = 0;   
-        // }
-        Debug.Log(networkPlayerData.clientID + " hit target " + (targets.Count - hitCount) + " remaining");
+        GlobalEventManager.OnTargetDestroyed += OnTargetDestroyed;
     }
 
-    // [ServerRpc]
-    // private void ActiveAllTargetsServerRpc()
-    // {
-    //     for (var i = 0; i < targets.Count; i++)
-    //     {
-    //         targets[i].gameObject.SetActive(true);
-    //     }
-    // }
+    private void OnDisable()
+    {
+        GlobalEventManager.OnTargetDestroyed -= OnTargetDestroyed;
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsHost)
+        {
+            RequestTargetOnlyServerRpc();
+        }
+    }
+
+    private void OnTargetDestroyed(NetworkPlayerData networkPlayerData)
+    {
+        Debug.Log(" Target destroyed by " + networkPlayerData.clientID);
+        destroyedTargetCount++;
+        if (destroyedTargetCount >= targetCount)
+        {
+            RequestTargetOnlyServerRpc();
+        }
+    }
+    
+        
+    [ServerRpc]
+    public void RequestTargetOnlyServerRpc()
+    {
+        for (int i = 0; i < targetCount; i++)
+        {
+            var var = Instantiate(targetController, new Vector3(Random.Range(-30,30), 0, Random.Range(-30,30)), Quaternion.identity);
+            var.GetComponent<NetworkObject>().Spawn();
+        }
+    }
 }
