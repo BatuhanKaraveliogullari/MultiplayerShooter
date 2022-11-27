@@ -6,9 +6,9 @@ using Random = UnityEngine.Random;
 
 public class NetworkSpawnController : NetworkBehaviour
 {
-    public GameObject playerPrefab;
-    public GameObject targetManager;
-
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject targetManager;
+    
     public override void OnNetworkSpawn()
     {
         Debug.Log(" Network Spawner Spawned. ");
@@ -24,9 +24,8 @@ public class NetworkSpawnController : NetworkBehaviour
     [ServerRpc]
     private void RequestPlayerSpawnServerRpc(ulong clientID)
     {
-        Debug.Log(" Requested Player Spawn from server. ");
-        var go = Instantiate(playerPrefab, new Vector3(Random.Range(-10,10), 1, Random.Range(-10,10)), Quaternion.identity);
-        go.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+        var gameObject = Instantiate(playerPrefab, new Vector3(Random.Range(-10,10), 1, Random.Range(-10,10)), Quaternion.identity);
+        gameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
     }
     
     [ServerRpc]

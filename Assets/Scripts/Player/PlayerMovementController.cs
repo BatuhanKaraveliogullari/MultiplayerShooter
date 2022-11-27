@@ -16,14 +16,17 @@ public class PlayerMovementController : PlayerController
     private float cachedXRotation;
     private float cachedYRotation;
 
-    private void Start()
+    public override void OnNetworkSpawn()
     {
         currentPlayerData = new PlayerData(OwnerClientId);
         foreach (var playerController in GetComponents<PlayerController>())
         {
             playerController.Init(currentPlayerData);
         }
-        
+    }
+
+    private void Start()
+    {
         if (!IsOwner)
         {
             Destroy(camera);

@@ -36,15 +36,9 @@ public class PlayerGunController : PlayerController
     [ServerRpc]
     private void RequestForBulletServerRpc(NetworkPlayerData playerData)
     {
-        //Debug.Log(" A bullet requested from server. ");
-        FireBulletClientRpc(playerData);
-    }
-
-    [ClientRpc]
-    private void FireBulletClientRpc(NetworkPlayerData playerData)
-    {
-        //Debug.Log(" Bullet is cresting by clients. ");
+        Debug.Log("Client" + (int)OwnerClientId + " Create new bullet belong to Client" + (int)playerData.clientID);
         GameObject go = Instantiate(baseBulletPrefabs, muzzle.position, Quaternion.identity);
+        go.GetComponent<NetworkObject>().Spawn();
         go.GetComponent<BulletController>().InitBullet(playerData, muzzle.forward);
     }
 }

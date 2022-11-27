@@ -7,6 +7,7 @@ public class PlayerData
     public ulong playerID;
     public BulletColor currentBulletColor;
     public BulletSize currentBulletSize;
+    public int playerScore;
 
     public PlayerData(ulong clientID)
     {

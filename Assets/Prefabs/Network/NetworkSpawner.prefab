@@ -47,6 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 1136394996140266239, guid: c3cac1648311c714e8567716decc3fcd, type: 3}
   targetManager: {fileID: 5190365170408356795, guid: fe158cea739602f40b592a01a10c594d, type: 3}
+  leaderboardCanvas: {fileID: 4983585651861530856, guid: b665ff248491eca42a6f3bcc77ceb54e, type: 3}
 --- !u!114 &3356000623962897795
 MonoBehaviour:
   m_ObjectHideFlags: 0

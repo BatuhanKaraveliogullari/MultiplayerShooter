@@ -26,13 +26,15 @@ public class TargetManager : NetworkBehaviour
         }
     }
 
-    private void OnTargetDestroyed(NetworkPlayerData networkPlayerData)
+    private void OnTargetDestroyed(ulong id, NetworkPlayerData networkPlayerData)
     {
-        Debug.Log(" Target destroyed by " + networkPlayerData.clientID);
+        if(id != OwnerClientId) return;
+        Debug.Log(" TargetManager Destroying Target shoot by  Client" + networkPlayerData.clientID);
         destroyedTargetCount++;
         if (destroyedTargetCount >= targetCount)
         {
             RequestTargetOnlyServerRpc();
+            destroyedTargetCount = 0;
         }
     }
     

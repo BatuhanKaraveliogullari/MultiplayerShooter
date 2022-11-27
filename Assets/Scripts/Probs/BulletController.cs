@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class BulletController : NetworkBehaviour, IColor
 {
-    private NetworkVariable<Color> NetColor = new();
+    private readonly NetworkVariable<Color> NetColor = new();
     [SerializeField] private float bulletSpeed = 1f;
     [SerializeField] private MeshRenderer bulletMeshRenderer;
     [SerializeField] private LayerMask targetLayer;
@@ -15,19 +15,42 @@ public class BulletController : NetworkBehaviour, IColor
     private Transform _transform;
     private NetworkPlayerData currentPlayerData;
 
+    private void Awake()
+    {
+        _transform = transform;
+        NetColor.OnValueChanged += OnColorChanged;
+    }
+
+    private void OnDisable()
+    {
+        NetColor.OnValueChanged -= OnColorChanged;
+    }
+
+    private void OnColorChanged(Color previousvalue, Color newvalue)
+    {
+        bulletMeshRenderer.material.color = newvalue;
+    }
+
     public void InitBullet(NetworkPlayerData playerData, Vector3 direction)
     {
-        Debug.Log("Client " + playerData.clientID);
         currentPlayerData = playerData;
         bulletDirection = direction;
-        _transform = transform;
+        InvokeRepeating(nameof(MoveBullet), 0, Time.deltaTime);
+        if(IsOwner) CommitColorServerRpc(ColorUtils.GetColorWithEnum(playerData.currentBulletColor));
+        _transform.localScale = VectorUtils.GetScaleWithEnum(playerData.currentBulletSize);
+    }
+
+    public override void OnNetworkSpawn()
+    {
         if (IsOwner)
         {
-            CommitColorServerRpc(ColorUtils.GetColorWithEnum(currentPlayerData.currentBulletColor));
+            CommitColorServerRpc(Color.white);    
         }
-        bulletMeshRenderer.material.color = ColorUtils.GetColorWithEnum(currentPlayerData.currentBulletColor);
-        _transform.localScale = VectorUtils.GetScaleWithEnum(currentPlayerData.currentBulletSize);
-        InvokeRepeating(nameof(MoveBullet), 0, Time.deltaTime);
+        else
+        {
+            bulletMeshRenderer.material.color = NetColor.Value;
+            _transform.localScale = Vector3.one;
+        }
     }
 
     public void MoveBullet()
@@ -38,13 +61,16 @@ public class BulletController : NetworkBehaviour, IColor
     [ServerRpc]
     public void CommitColorServerRpc(Color color)
     {
+        Debug.Log(color);
         NetColor.Value = color;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Client" + (int)currentPlayerData.clientID + "'s bullet hit " + other.gameObject.name);
         if((1 << other.gameObject.layer & targetLayer) != 0)
         {
+            Debug.Log("Client" + (int)currentPlayerData.clientID + "'s bullet hit the target.");
             other.GetComponent<TargetController>().HitTarget(currentPlayerData);
             Destroy(gameObject);
         }    

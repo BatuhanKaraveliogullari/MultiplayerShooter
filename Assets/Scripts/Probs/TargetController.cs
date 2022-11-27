@@ -7,9 +7,9 @@ public class TargetController : NetworkBehaviour
 {
     public void HitTarget(NetworkPlayerData networkPlayerData)
     {
-        Debug.Log(" Target destroyed by " + networkPlayerData.clientID);
+        Debug.Log(gameObject.name + " hit by Client" + networkPlayerData.clientID + "'s bullet on Client" + OwnerClientId + " game.");
         if(!IsOwner) return;
+        GlobalEventManager.OnTargetDestroyed.Invoke(OwnerClientId, networkPlayerData);
         GetComponent<NetworkObject>().Despawn();
-        GlobalEventManager.OnTargetDestroyed.Invoke(networkPlayerData);
     }
 }

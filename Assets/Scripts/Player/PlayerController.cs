@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-    protected PlayerData currentPlayerData;
+    public PlayerData currentPlayerData;
     protected bool isMenuActive;
     
     private void OnEnable()
