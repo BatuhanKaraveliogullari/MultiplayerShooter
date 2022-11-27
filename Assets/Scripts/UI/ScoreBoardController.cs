@@ -112,7 +112,8 @@ public class ScoreBoardController : NetworkBehaviour
 
     private int CalculateScore(NetworkPlayerData networkPlayerData)
     {
-        return 1;
+        return (EnumUtils.IsEqualColor(networkPlayerData.currentBulletColor, GameModeController.Instance.ActiveColorMode) && 
+                EnumUtils.IsEqualColor(networkPlayerData.currentBulletSize, GameModeController.Instance.ActiveSizeMode)) ? 1 : -1;
     }
 
     private bool IsNetworkListContainID(ulong id)
