@@ -61,7 +61,6 @@ public class BulletController : NetworkBehaviour, IColor
     [ServerRpc]
     public void CommitColorServerRpc(Color color)
     {
-        Debug.Log(color);
         NetColor.Value = color;
     }
 

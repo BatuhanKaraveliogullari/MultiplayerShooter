@@ -8,7 +8,7 @@ public class NetworkSpawnController : NetworkBehaviour
 {
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject targetManager;
-    
+    [SerializeField] private GameObject scoreboard;
     public override void OnNetworkSpawn()
     {
         Debug.Log(" Network Spawner Spawned. ");
@@ -18,6 +18,7 @@ public class NetworkSpawnController : NetworkBehaviour
         if (IsHost)
         {
             RequestTargetsServerRpc();
+            RequestScoreboardServerRpc();
         }
     }
 
@@ -32,6 +33,14 @@ public class NetworkSpawnController : NetworkBehaviour
     public void RequestTargetsServerRpc()
     {
         var go = Instantiate(targetManager);
+        go.GetComponent<NetworkObject>().Spawn();
+    }
+    
+    [ServerRpc]
+    public void RequestScoreboardServerRpc()
+    {
+        Debug.Log(" One score board requested. ");
+        var go = Instantiate(scoreboard);
         go.GetComponent<NetworkObject>().Spawn();
     }
 }
