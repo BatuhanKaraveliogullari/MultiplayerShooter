@@ -16,7 +16,6 @@ public class ClientScoreSlotController : MonoBehaviour
 
     public void InitSlot(ulong id, int score)
     {
-        Debug.Log("id" + id + " score " + score);
         currentPlayerColor.color = ColorUtils.GetColorForClient((int)id);
         playerName.text = "Player" + (int)id;
         UpdateSlot(score);

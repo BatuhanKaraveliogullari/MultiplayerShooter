@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1136394994719632272}
   - component: {fileID: 1136394994719632279}
   - component: {fileID: 1136394994719632278}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 1136394996140266232}
   - component: {fileID: -8193537260532599841}
   - component: {fileID: -3693093867151441024}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
@@ -209,6 +209,8 @@ MonoBehaviour:
   muzzle: {fileID: 931947043574130028}
   baseBulletPrefabs: {fileID: 2603802438969101327, guid: f9d3e01e936ee64458ff2d61bd608d60, type: 3}
   shootFrequency: 1
+  stunBombPrefab: {fileID: 1709734317233730859, guid: ff76af3f05557104fbb549bfdfcc51f7, type: 3}
+  coolDownForStunBomb: 5
 --- !u!1 &1136394996472042285
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,8 +222,7 @@ GameObject:
   - component: {fileID: 1136394996472042286}
   - component: {fileID: 1136394996472042281}
   - component: {fileID: 1136394996472042280}
-  - component: {fileID: 1136394996472042287}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,19 +295,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &1136394996472042287
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1136394996472042285}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6092467949301023288
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,7 +307,7 @@ GameObject:
   - component: {fileID: 1697564520007138980}
   - component: {fileID: 5347676533027300928}
   - component: {fileID: 6631917394750679360}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: VisualPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +402,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 931947043574130028}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Muzzle
   m_TagString: Untagged
   m_Icon: {fileID: 0}

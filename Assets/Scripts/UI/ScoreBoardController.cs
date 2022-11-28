@@ -105,7 +105,6 @@ public class ScoreBoardController : NetworkBehaviour
     private void CreateNewSlot(ScorePlayerData scoreData)
     {
         GameObject tempSlot = Instantiate(scoreSlot, transform);
-        Debug.Log(scoreData.currentClientID + " id " + scoreData.currentScore + " SCORE");
         tempSlot.GetComponent<ClientScoreSlotController>().InitSlot(scoreData.currentClientID, scoreData.currentScore);
         usedSlots.Add(scoreData.currentClientID, tempSlot.GetComponent<ClientScoreSlotController>());
     }
@@ -174,86 +173,3 @@ public struct ScorePlayerData : INetworkSerializable, IEquatable<ScorePlayerData
         return HashCode.Combine(currentClientID, currentScore);
     }
 }
-// public class ScoreData : NetworkVariableBase, INetworkSerializable
-// {
-//     public List<ulong> clientIDs = new List<ulong>();
-//     public List<ScorePlayerData> clientScoreSlots = new List<ScorePlayerData>();
-//
-//     public void UpdateSlotValues(ulong id, int score)
-//     {
-//         clientScoreSlots[clientIDs.IndexOf(id)].score += score;
-//     }
-//
-//     public override void WriteField(FastBufferWriter writer)
-//     {
-//         writer.WriteValueSafe(clientIDs.Count);
-//         foreach (var dataEntry in clientIDs)
-//         {
-//             writer.WriteValueSafe(dataEntry);
-//         }
-//         writer.WriteValueSafe(clientScoreSlots.Count);
-//         foreach (var dataEntry in clientScoreSlots)
-//         {
-//             writer.WriteValueSafe(dataEntry.color);
-//             writer.WriteValueSafe(dataEntry.score);
-//         }
-//     }
-//
-//     public override void ReadField(FastBufferReader reader)
-//     {
-//         var itemsToUpdate = (int)0;
-//         reader.ReadValueSafe(out itemsToUpdate);
-//         clientIDs.Clear();
-//         for (int i = 0; i < itemsToUpdate; i++)
-//         {
-//             reader.ReadValueSafe(out ulong newEntry);
-//             clientIDs.Add(newEntry);
-//         }
-//         clientScoreSlots.Clear();
-//     }
-//
-//     public override void ReadDelta(FastBufferReader reader, bool keepDirtyDelta)
-//     {
-//         
-//     }
-//     
-//     public override void WriteDelta(FastBufferWriter writer)
-//     {
-//         
-//     }
-//
-//     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-//     {
-//         int count = 0;
-//         serializer.SerializeValue(ref count);
-//         for (int i = 0; i < count; i++)
-//         {
-//             serializer.SerializeValue(ref clientIDs[i]);
-//         }
-//     }
-// }
-
-
-
-// public struct ScoreData : INetworkSerializable , IEquatable<ScoreData>
-// {
-//     public ScoreData(ScoreData lastScoreData, NetworkPlayerData networkPlayerData)
-//     {
-//         
-//     }
-//
-//     public ScoreData(NetworkPlayerData networkPlayerData)
-//     {
-//         
-//     }
-//
-//     public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-//     {
-//         
-//     }
-//
-//     public bool Equals(ScoreData other)
-//     {
-//         return false;
-//     }
-// }
