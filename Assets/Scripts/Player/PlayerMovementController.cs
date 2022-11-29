@@ -15,6 +15,8 @@ public class PlayerMovementController : PlayerController
     
     private float cachedXRotation;
     private float cachedYRotation;
+    
+    protected bool isStunned;
 
     public override void OnNetworkSpawn()
     {
@@ -39,7 +41,7 @@ public class PlayerMovementController : PlayerController
     
     private void Update()
     {
-        if(isMenuActive) return;
+        if(isMenuActive || isStunned) return;
         Move();
         Rotate();
     }
@@ -57,5 +59,18 @@ public class PlayerMovementController : PlayerController
         cachedYRotation = Mathf.Clamp(cachedYRotation - (Input.GetAxis("Mouse Y") * mouseSensitivity), -90, 90);
         //Value we got represent the rotation angle along axises. That's why we use Y for X angle.
         transform.rotation = Quaternion.Euler(cachedYRotation, cachedXRotation, 0);
+    }
+    
+    public void StunPlayer(float stunDuration)
+    {
+        Debug.Log(" IsStun set " + true);
+        isStunned = true;
+        Invoke(nameof(ReleasePlayer), stunDuration);
+    }
+
+    private void ReleasePlayer()
+    {
+        Debug.Log(" IsStun set " + false);
+        isStunned = false;
     }
 }

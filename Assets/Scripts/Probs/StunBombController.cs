@@ -4,6 +4,7 @@ using UnityEngine;
 public class StunBombController : NetworkBehaviour
 {
     [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private float stunDuration;
     private NetworkPlayerData playerData;
     private NetworkVariable<Vector3> networkExplosionPosition = new NetworkVariable<Vector3>();
     public void InitExplosive(NetworkPlayerData networkPlayerData)
@@ -40,9 +41,9 @@ public class StunBombController : NetworkBehaviour
     private int ExplosionDamage(Vector3 center, float radius)
     {
         Collider[] colliders = Physics.OverlapSphere(center, radius, playerLayer);
-        foreach (var collider1 in colliders)
+        foreach (var playerCollider in colliders)
         {
-            Debug.Log(collider1.transform.parent.name);
+            playerCollider.GetComponentInParent<PlayerMovementController>().StunPlayer(stunDuration);
         }
 
         return colliders.Length;

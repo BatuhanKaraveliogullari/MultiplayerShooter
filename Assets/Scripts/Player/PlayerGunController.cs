@@ -15,16 +15,11 @@ public class PlayerGunController : PlayerController
     [Header("Bomb")]
     [SerializeField] private GameObject stunBombPrefab;
     [SerializeField] private float coolDownForStunBomb = 5f;
+    
     private float nextTimeToFire = 0f;
     private float nextTimeForStunBomb = 0f;
     private StunBombController placedStunBomb;
     private ulong placedID;
-    
-
-    private void Start()
-    {
-
-    }
 
     public override void OnNetworkSpawn()
     {
@@ -41,7 +36,6 @@ public class PlayerGunController : PlayerController
 
         if (Input.GetMouseButton(0) && nextTimeToFire >= 1f / shootFrequency)
         {
-            //we will shoot
             netPlayerData.Value = new NetworkPlayerData(currentPlayerData);
             RequestForBulletServerRpc(netPlayerData.Value);
             nextTimeToFire = 0f;

@@ -7,7 +7,7 @@ public class PlayerController : NetworkBehaviour
 {
     public PlayerData currentPlayerData;
     protected bool isMenuActive;
-    
+
     private void OnEnable()
     {
         GlobalEventManager.OnIsSelectionMenuActive += OnIsMenuActive;
