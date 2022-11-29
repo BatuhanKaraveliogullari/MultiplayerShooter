@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TargetManager : NetworkBehaviour
 {
-    public GameObject targetController;
-    public int targetCount;
+    [SerializeField] private NetworkObject targetController;
+    [SerializeField] private int targetCount;
     private int destroyedTargetCount = 0;
     
     private void OnEnable()
@@ -20,32 +20,28 @@ public class TargetManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsHost)
-        {
-            RequestTargetOnlyServerRpc();
-        }
+        if (!IsHost) return;
+        RequestTargetsServerRpc();
     }
 
     private void OnTargetDestroyed(NetworkPlayerData networkPlayerData)
     {
-        //if(id != OwnerClientId) return;
-        Debug.Log(" TargetManager Destroying Target shoot by  Client" + networkPlayerData.clientID);
+        if(!IsHost) return;
         destroyedTargetCount++;
         if (destroyedTargetCount >= targetCount)
         {
-            if(IsHost) RequestTargetOnlyServerRpc();
+            RequestTargetsServerRpc();
             destroyedTargetCount = 0;
         }
     }
     
         
     [ServerRpc]
-    public void RequestTargetOnlyServerRpc()
+    private void RequestTargetsServerRpc()
     {
         for (int i = 0; i < targetCount; i++)
         {
-            var var = Instantiate(targetController, new Vector3(Random.Range(-30,30), 0, Random.Range(-30,30)), Quaternion.identity);
-            var.GetComponent<NetworkObject>().Spawn();
+            Instantiate(targetController, new Vector3(Random.Range(-30,30), 0, Random.Range(-30,30)), Quaternion.identity).Spawn();
         }
     }
 }

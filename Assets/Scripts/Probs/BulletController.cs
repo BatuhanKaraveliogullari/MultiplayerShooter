@@ -36,7 +36,7 @@ public class BulletController : NetworkBehaviour, IColor
         currentPlayerData = playerData;
         bulletDirection = direction;
         InvokeRepeating(nameof(MoveBullet), 0, Time.deltaTime);
-        if(IsOwner) CommitColorServerRpc(ColorUtils.GetColorWithEnum(playerData.currentBulletColor));
+        if(IsOwner) RequestColorChangeServerRpc(ColorUtils.GetColorWithEnum(playerData.currentBulletColor));
         _transform.localScale = VectorUtils.GetScaleWithEnum(playerData.currentBulletSize);
     }
 
@@ -44,7 +44,7 @@ public class BulletController : NetworkBehaviour, IColor
     {
         if (IsOwner)
         {
-            CommitColorServerRpc(Color.white);    
+            RequestColorChangeServerRpc(Color.white);    
         }
         else
         {
@@ -59,19 +59,15 @@ public class BulletController : NetworkBehaviour, IColor
     }
     
     [ServerRpc]
-    public void CommitColorServerRpc(Color color)
+    public void RequestColorChangeServerRpc(Color color)
     {
         NetColor.Value = color;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Client" + (int)currentPlayerData.clientID + "'s bullet hit " + other.gameObject.name);
-        if((1 << other.gameObject.layer & targetLayer) != 0)
-        {
-            Debug.Log("Client" + (int)currentPlayerData.clientID + "'s bullet hit the target.");
-            other.GetComponent<TargetController>().HitTarget(currentPlayerData);
-            Destroy(gameObject);
-        }    
+        if ((1 << other.gameObject.layer & targetLayer) == 0) return;
+        other.GetComponent<TargetController>().HitTarget(currentPlayerData);
+        Destroy(gameObject);
     }
 }

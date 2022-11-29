@@ -1,46 +1,36 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 public class NetworkSpawnController : NetworkBehaviour
 {
-    [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject targetManager;
-    [SerializeField] private GameObject scoreboard;
+    [SerializeField] private NetworkObject playerPrefab;
+    [SerializeField] private NetworkObject targetManager;
+    [SerializeField] private NetworkObject scoreboard;
     public override void OnNetworkSpawn()
     {
-        Debug.Log(" Network Spawner Spawned. ");
-
         if (!IsOwner) return;
         RequestPlayerSpawnServerRpc(OwnerClientId);
-        if (IsHost)
-        {
-            RequestTargetsServerRpc();
-            RequestScoreboardServerRpc();
-        }
+        if (!IsHost) return;
+        RequestScoreboardServerRpc();
+        RequestTargetManagerServerRpc();
     }
 
     [ServerRpc]
     private void RequestPlayerSpawnServerRpc(ulong clientID)
     {
-        var gameObject = Instantiate(playerPrefab, new Vector3(Random.Range(-10,10), 1, Random.Range(-10,10)), Quaternion.identity);
-        gameObject.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientID);
+        Instantiate(playerPrefab, new Vector3(Random.Range(-10,10), 1, Random.Range(-10,10)), Quaternion.identity).SpawnAsPlayerObject(clientID);
     }
     
     [ServerRpc]
-    public void RequestTargetsServerRpc()
+    private void RequestTargetManagerServerRpc()
     {
-        var go = Instantiate(targetManager);
-        go.GetComponent<NetworkObject>().Spawn();
+        Instantiate(targetManager).Spawn();
     }
     
     [ServerRpc]
-    public void RequestScoreboardServerRpc()
+    private void RequestScoreboardServerRpc()
     {
-        Debug.Log(" One score board requested. ");
-        var go = Instantiate(scoreboard);
-        go.GetComponent<NetworkObject>().Spawn();
+        Instantiate(scoreboard).Spawn();
     }
 }

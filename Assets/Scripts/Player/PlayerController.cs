@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour
 {
-    public PlayerData currentPlayerData;
+    protected PlayerData currentPlayerData;
     protected bool isMenuActive;
+    protected Transform cachedTransform;
 
     private void OnEnable()
     {
@@ -26,5 +27,6 @@ public class PlayerController : NetworkBehaviour
     public virtual void Init(PlayerData playerData)
     {
         currentPlayerData = playerData;
+        cachedTransform = transform;
     }
 }

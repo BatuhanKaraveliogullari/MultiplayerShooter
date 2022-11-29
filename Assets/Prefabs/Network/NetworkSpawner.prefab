@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0490174fc0a954ba58822e1ef9995e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 1136394996140266239, guid: c3cac1648311c714e8567716decc3fcd, type: 3}
-  targetManager: {fileID: 5190365170408356795, guid: fe158cea739602f40b592a01a10c594d, type: 3}
-  scoreboard: {fileID: 7172177894990795383, guid: bc77b88f3acb8ad47bcd46d369324f10, type: 3}
+  playerPrefab: {fileID: -2474900568922223512, guid: c3cac1648311c714e8567716decc3fcd, type: 3}
+  targetManager: {fileID: 7051994896299513371, guid: fe158cea739602f40b592a01a10c594d, type: 3}
+  scoreboard: {fileID: 3902866055547152991, guid: bc77b88f3acb8ad47bcd46d369324f10, type: 3}
 --- !u!114 &3356000623962897795
 MonoBehaviour:
   m_ObjectHideFlags: 0

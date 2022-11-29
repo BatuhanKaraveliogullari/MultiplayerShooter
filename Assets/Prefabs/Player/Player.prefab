@@ -207,9 +207,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   muzzle: {fileID: 931947043574130028}
-  baseBulletPrefabs: {fileID: 2603802438969101327, guid: f9d3e01e936ee64458ff2d61bd608d60, type: 3}
+  baseBulletPrefabs: {fileID: -1159474746918056094, guid: f9d3e01e936ee64458ff2d61bd608d60, type: 3}
   shootFrequency: 1
-  stunBombPrefab: {fileID: 1709734317233730859, guid: ff76af3f05557104fbb549bfdfcc51f7, type: 3}
+  stunBombPrefab: {fileID: 2076877244441471, guid: ff76af3f05557104fbb549bfdfcc51f7, type: 3}
   coolDownForStunBomb: 5
 --- !u!1 &1136394996472042285
 GameObject:

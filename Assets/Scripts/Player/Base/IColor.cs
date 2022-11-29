@@ -5,5 +5,5 @@ using UnityEngine;
 
 public interface IColor
 {
-    [ServerRpc] void CommitColorServerRpc(Color color);
+    [ServerRpc] void RequestColorChangeServerRpc(Color color);
 }

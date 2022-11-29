@@ -7,11 +7,10 @@ public class PlayerData
     public ulong playerID;
     public BulletColor currentBulletColor;
     public BulletSize currentBulletSize;
-    public int playerScore;
 
     public PlayerData(ulong clientID)
     {
-        playerColor = ColorUtils.GetColorForClient((int)clientID);
+        playerColor = ColorUtils.GetColorForClient(clientID);
         playerID = clientID;
         currentBulletColor = BulletColor.Blue;
         currentBulletSize = BulletSize.Large;

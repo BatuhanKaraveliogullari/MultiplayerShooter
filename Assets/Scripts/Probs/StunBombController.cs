@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class StunBombController : NetworkBehaviour
 {
+    private readonly NetworkVariable<Vector3> networkExplosionPosition = new NetworkVariable<Vector3>();
+    
     [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private float stunDuration;
+    
+    [SerializeField] private float stunDuration = 15f;
     [SerializeField] private float stunRadius = 5f;
     private NetworkPlayerData playerData;
-    private NetworkVariable<Vector3> networkExplosionPosition = new NetworkVariable<Vector3>();
-    private List<PlayerMovementController> cachedAffectedPlayers = new List<PlayerMovementController>();
+    
+
     public void InitExplosive(NetworkPlayerData networkPlayerData)
     {
         playerData = networkPlayerData;
@@ -24,7 +27,6 @@ public class StunBombController : NetworkBehaviour
     public void Explode()
     {
         if(!IsOwner) return;
-        Debug.Log(" Bomb has bean destroyed on " + (int)OwnerClientId + "'s game. ");
         RequestExplosionServerRpc(networkExplosionPosition.Value, playerData);
     }
 
@@ -47,7 +49,6 @@ public class StunBombController : NetworkBehaviour
         foreach (var playerCollider in colliders)
         {
             if (playerCollider.GetComponentInParent<PlayerController>().OwnerClientId == networkPlayerData.clientID) continue;
-            Debug.Log("Client" + (int)OwnerClientId + " affected stun bumb placed by Client" + (int)networkPlayerData.clientID);
             playerCollider.GetComponentInParent<PlayerMovementController>().StunPlayer(stunDuration);
         }
     }

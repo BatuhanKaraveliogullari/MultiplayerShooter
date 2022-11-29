@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerMovementController : PlayerController
@@ -16,10 +12,11 @@ public class PlayerMovementController : PlayerController
     private float cachedXRotation;
     private float cachedYRotation;
     
-    protected bool isStunned;
+    private bool isStunned;
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         currentPlayerData = new PlayerData(OwnerClientId);
         foreach (var playerController in GetComponents<PlayerController>())
         {
@@ -27,8 +24,10 @@ public class PlayerMovementController : PlayerController
         }
     }
 
-    private void Start()
+    public override void Init(PlayerData playerData)
     {
+        base.Init(playerData);
+        
         if (!IsOwner)
         {
             Destroy(camera);
@@ -38,7 +37,7 @@ public class PlayerMovementController : PlayerController
             GlobalEventManager.OnOwnerSetSpecification.Invoke(NetworkObject, currentPlayerData);
         }
     }
-    
+
     private void Update()
     {
         if(isMenuActive || isStunned) return;
@@ -50,7 +49,7 @@ public class PlayerMovementController : PlayerController
     {
         horizontalMovement = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
         verticalMovement = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
-        transform.position += VectorUtils.CorrectHeight(horizontalMovement * transform.right + verticalMovement * transform.forward);
+        cachedTransform.position += VectorUtils.CorrectHeight(horizontalMovement * cachedTransform.right + verticalMovement * cachedTransform.forward);
     }
 
     private void Rotate()
@@ -58,19 +57,17 @@ public class PlayerMovementController : PlayerController
         cachedXRotation += Input.GetAxis("Mouse X") * mouseSensitivity;
         cachedYRotation = Mathf.Clamp(cachedYRotation - (Input.GetAxis("Mouse Y") * mouseSensitivity), -90, 90);
         //Value we got represent the rotation angle along axises. That's why we use Y for X angle.
-        transform.rotation = Quaternion.Euler(cachedYRotation, cachedXRotation, 0);
+        cachedTransform.rotation = Quaternion.Euler(cachedYRotation, cachedXRotation, 0);
     }
     
     public void StunPlayer(float stunDuration)
     {
-        Debug.Log(" IsStun set " + true);
         isStunned = true;
         Invoke(nameof(ReleasePlayer), stunDuration);
     }
 
     private void ReleasePlayer()
     {
-        Debug.Log(" IsStun set " + false);
         isStunned = false;
     }
 }
