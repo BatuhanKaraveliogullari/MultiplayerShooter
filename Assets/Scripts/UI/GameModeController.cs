@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -8,12 +6,15 @@ using Random = UnityEngine.Random;
 public class GameModeController : NetworkBehaviour
 {
     public static GameModeController Instance;
+    
+    private NetworkVariable<GameMode> networkGameModeVariable = new NetworkVariable<GameMode>();
 
     public BulletColor ActiveColorMode { get => networkGameModeVariable.Value.currentBulletColor; }
     public BulletSize ActiveSizeMode { get => networkGameModeVariable.Value.currentBulletSize; }
+    
     [SerializeField] private TMP_Text gameModeText;
     [SerializeField] private float roundSession = 1f;
-    private NetworkVariable<GameMode> networkGameModeVariable = new NetworkVariable<GameMode>();
+    
     private void Awake()
     {
         Instance = this;
@@ -22,29 +23,40 @@ public class GameModeController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        
         networkGameModeVariable.OnValueChanged += OnGameModeChanged;
+        
         if (IsHost)
         {
             InvokeRepeating(nameof(SetGameMode), 0, roundSession); 
         }
     }
 
-    private void OnGameModeChanged(GameMode previousvalue, GameMode newvalue)
+    public override void OnDestroy()
     {
-        if(IsOwner) ChangedGameModeServerRpc(newvalue);
+        base.OnDestroy();
+        
+        networkGameModeVariable.OnValueChanged -= OnGameModeChanged;
+    }
+
+    private void OnGameModeChanged(GameMode previousValue, GameMode newValue)
+    {
+        if(IsOwner) ChangedGameModeServerRpc(newValue);
     }
 
     [ServerRpc]
     private void ChangedGameModeServerRpc(GameMode gameMode)
     {
-        UpdateGameModeCLientRpc(gameMode);
+        UpdateGameModeClientRpc(gameMode);
     }
 
     [ClientRpc]
-    private void UpdateGameModeCLientRpc(GameMode gameMode)
+    private void UpdateGameModeClientRpc(GameMode gameMode)
     {
         gameModeText.text = gameMode.currentBulletColor.ToString() + " - " +
                             gameMode.currentBulletSize.ToString();
+        gameModeText.color = ColorUtils.GetColorWithEnum(gameMode.currentBulletColor);
     }
     
 
@@ -91,18 +103,5 @@ public class GameModeController : NetworkBehaviour
         {
             return BulletSize.Large;
         }
-    }
-}
-
-public struct GameMode : INetworkSerializable
-{
-    public BulletColor currentBulletColor;
-    public BulletSize currentBulletSize;
-
-
-    public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-    {
-        serializer.SerializeValue(ref currentBulletColor);
-        serializer.SerializeValue(ref currentBulletSize);
     }
 }

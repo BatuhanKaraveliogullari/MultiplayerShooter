@@ -1,17 +1,16 @@
-using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerData
 {
-    public Color playerColor;
     public ulong playerID;
+    public Color playerColor;
     public BulletColor currentBulletColor;
     public BulletSize currentBulletSize;
 
     public PlayerData(ulong clientID)
     {
-        playerColor = ColorUtils.GetColorForClient(clientID);
         playerID = clientID;
+        playerColor = ColorUtils.GetColorForClient(clientID);
         currentBulletColor = BulletColor.Blue;
         currentBulletSize = BulletSize.Large;
         GlobalEventManager.OnClientBulletColorChanged += ClientColorChanged;

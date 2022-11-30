@@ -3,22 +3,29 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : NetworkBehaviour, IPlayerInitialize
 {
     protected PlayerData currentPlayerData;
     protected bool isMenuActive;
     protected Transform cachedTransform;
 
-    private void OnEnable()
+    public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        
         GlobalEventManager.OnIsSelectionMenuActive += OnIsMenuActive;
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void OnDisable()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+        
         GlobalEventManager.OnIsSelectionMenuActive -= OnIsMenuActive;
     }
-
+    
     private void OnIsMenuActive(bool isActive)
     {
         isMenuActive = isActive;

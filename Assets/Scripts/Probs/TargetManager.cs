@@ -6,12 +6,8 @@ public class TargetManager : NetworkBehaviour
 {
     [SerializeField] private NetworkObject targetController;
     [SerializeField] private int targetCount;
-    private int destroyedTargetCount = 0;
     
-    private void OnEnable()
-    {
-        GlobalEventManager.OnTargetDestroyed += OnTargetDestroyed;
-    }
+    private int destroyedTargetCount = 0;
 
     private void OnDisable()
     {
@@ -20,8 +16,19 @@ public class TargetManager : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
+        
+        GlobalEventManager.OnTargetDestroyed += OnTargetDestroyed;
+        
         if (!IsHost) return;
         RequestTargetsServerRpc();
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        
+        GlobalEventManager.OnTargetDestroyed -= OnTargetDestroyed;
     }
 
     private void OnTargetDestroyed(NetworkPlayerData networkPlayerData)
@@ -34,8 +41,7 @@ public class TargetManager : NetworkBehaviour
             destroyedTargetCount = 0;
         }
     }
-    
-        
+
     [ServerRpc]
     private void RequestTargetsServerRpc()
     {

@@ -357,9 +357,9 @@ GameObject:
   - component: {fileID: 494505281475100641}
   - component: {fileID: 494505281475100642}
   - component: {fileID: 494505281475100643}
-  - component: {fileID: 8375786851401647073}
   - component: {fileID: 6101328317521895352}
   - component: {fileID: -8776055814398599800}
+  - component: {fileID: 8375786851401647073}
   m_Layer: 5
   m_Name: ClientSlot
   m_TagString: Untagged
@@ -428,22 +428,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8375786851401647073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 494505281475084318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf456d3415451e429857e8b6cbe2961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentPlayerColor: {fileID: 494505279861103109}
-  playerName: {fileID: 494505279659959747}
-  playerScore: {fileID: 494505280703476497}
-  cachedScore: 0
 --- !u!114 &6101328317521895352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,3 +470,18 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &8375786851401647073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494505281475084318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf456d3415451e429857e8b6cbe2961, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentPlayerColor: {fileID: 494505279861103109}
+  playerName: {fileID: 494505279659959747}
+  playerScore: {fileID: 494505280703476497}

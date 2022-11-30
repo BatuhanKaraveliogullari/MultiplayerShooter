@@ -21,6 +21,7 @@ public class StunBombController : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        
         networkExplosionPosition.Value = transform.position;
     }
 

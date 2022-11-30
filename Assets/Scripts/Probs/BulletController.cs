@@ -18,11 +18,29 @@ public class BulletController : NetworkBehaviour, IColor
     private void Awake()
     {
         _transform = transform;
+    }
+    
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+        
+        if (IsOwner)
+        {
+            RequestColorChangeServerRpc(Color.white);    
+        }
+        else
+        {
+            bulletMeshRenderer.material.color = NetColor.Value;
+            _transform.localScale = Vector3.one;
+        }
+        
         NetColor.OnValueChanged += OnColorChanged;
     }
 
-    private void OnDisable()
+    public override void OnDestroy()
     {
+        base.OnDestroy();
+        
         NetColor.OnValueChanged -= OnColorChanged;
     }
 
@@ -38,19 +56,6 @@ public class BulletController : NetworkBehaviour, IColor
         InvokeRepeating(nameof(MoveBullet), 0, Time.deltaTime);
         if(IsOwner) RequestColorChangeServerRpc(ColorUtils.GetColorWithEnum(playerData.currentBulletColor));
         _transform.localScale = VectorUtils.GetScaleWithEnum(playerData.currentBulletSize);
-    }
-
-    public override void OnNetworkSpawn()
-    {
-        if (IsOwner)
-        {
-            RequestColorChangeServerRpc(Color.white);    
-        }
-        else
-        {
-            bulletMeshRenderer.material.color = NetColor.Value;
-            _transform.localScale = Vector3.one;
-        }
     }
 
     public void MoveBullet()

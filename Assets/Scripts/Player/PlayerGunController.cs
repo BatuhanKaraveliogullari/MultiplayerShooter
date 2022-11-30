@@ -23,8 +23,8 @@ public class PlayerGunController : PlayerController
     
     private StunBombController placedBomb;
     private ulong placedBombClientID;
-    private Transform cachedCameraTransform;
     private RaycastHit cachedHit;
+    private Transform cachedCameraTransform;
 
     public override void OnNetworkSpawn()
     {
@@ -32,16 +32,13 @@ public class PlayerGunController : PlayerController
         nextTimeToFire = 1 / shootFrequency;
         nextTimeForStunBomb = coolDownForStunBomb;
         placedBombClientID = 100;
-        cachedCameraTransform = Camera.main.transform;
+        cachedCameraTransform = GetComponentInChildren<Camera>().transform;
     }
 
     private void Update()
     {
         if(!IsOwner || isMenuActive) return;
         
-        Debug.DrawRay(muzzle.position, muzzle.forward * 1000, Color.green);
-        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 1000, Color.red);
-
         if (Input.GetMouseButton(0) && nextTimeToFire >= 1f / shootFrequency)
         {
             netPlayerData.Value = new NetworkPlayerData(currentPlayerData);

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerMovementController : PlayerController
 {
-    [SerializeField] private GameObject camera;
+    [SerializeField] private Camera cameraObject;
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float mouseSensitivity = 5f;
 
@@ -17,7 +17,9 @@ public class PlayerMovementController : PlayerController
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
+        
         currentPlayerData = new PlayerData(OwnerClientId);
+        
         foreach (var playerController in GetComponents<PlayerController>())
         {
             playerController.Init(currentPlayerData);
@@ -30,7 +32,7 @@ public class PlayerMovementController : PlayerController
         
         if (!IsOwner)
         {
-            Destroy(camera);
+            cameraObject.enabled = false;
         }
         else
         {
