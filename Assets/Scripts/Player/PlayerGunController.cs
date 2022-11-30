@@ -23,18 +23,24 @@ public class PlayerGunController : PlayerController
     
     private StunBombController placedBomb;
     private ulong placedBombClientID;
+    private Transform cachedCameraTransform;
+    private RaycastHit cachedHit;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         nextTimeToFire = 1 / shootFrequency;
         nextTimeForStunBomb = coolDownForStunBomb;
-        placedBombClientID = (ulong)100;
+        placedBombClientID = 100;
+        cachedCameraTransform = Camera.main.transform;
     }
 
     private void Update()
     {
         if(!IsOwner || isMenuActive) return;
+        
+        Debug.DrawRay(muzzle.position, muzzle.forward * 1000, Color.green);
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * 1000, Color.red);
 
         if (Input.GetMouseButton(0) && nextTimeToFire >= 1f / shootFrequency)
         {
@@ -62,6 +68,18 @@ public class PlayerGunController : PlayerController
     [ServerRpc]
     private void RequestBulletServerRpc(NetworkPlayerData playerData)
     {
+        if (Physics.Raycast(cachedCameraTransform.position, cachedCameraTransform.forward, out cachedHit))
+        {
+            if (Vector3.Distance(cachedCameraTransform.position, cachedHit.point) > 1f)
+            {
+                muzzle.LookAt(cachedHit.point);
+            }
+        }
+        else
+        {
+            muzzle.LookAt(cachedCameraTransform.position + (cachedCameraTransform.forward * 30f));
+        }
+        
         NetworkObject createdBullet = Instantiate(baseBulletPrefabs, muzzle.position, Quaternion.identity);
         createdBullet.Spawn();
         createdBullet.GetComponent<BulletController>().InitBullet(playerData, muzzle.forward);
