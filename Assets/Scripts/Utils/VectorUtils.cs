@@ -1,23 +1,25 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Enums;
 using UnityEngine;
 
-public static class VectorUtils
+namespace Utils
 {
-    public static Vector3 CorrectHeight(Vector3 wrongVector) => new Vector3(wrongVector.x, 0, wrongVector.z);
-
-    public static Vector3 GetScaleWithEnum(BulletSize bulletSize)
+    public static class VectorUtils
     {
-        switch (bulletSize)
+        public static Vector3 CorrectHeight(Vector3 wrongVector) => new Vector3(wrongVector.x, 0, wrongVector.z);
+
+        public static Vector3 GetScaleWithEnum(BulletSize bulletSize)
         {
-            case BulletSize.Small:
-                return Vector3.one * 0.3f;
-            case BulletSize.Standard:
-                return Vector3.one * 0.6f;
-            case BulletSize.Large:
-                return Vector3.one * 0.9f;
+            switch (bulletSize)
+            {
+                case BulletSize.Small:
+                    return Vector3.one * 0.3f;
+                case BulletSize.Standard:
+                    return Vector3.one * 0.6f;
+                case BulletSize.Large:
+                    return Vector3.one * 0.9f;
+            }
+            throw new Exception(" Three is no size ");
         }
-        throw new Exception(" Three is no size ");
     }
 }

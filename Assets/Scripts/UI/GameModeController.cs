@@ -1,107 +1,112 @@
+using Enums;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using Utils;
 using Random = UnityEngine.Random;
 
-public class GameModeController : NetworkBehaviour
+namespace UI
 {
-    public static GameModeController Instance;
-    
-    private NetworkVariable<GameMode> networkGameModeVariable = new NetworkVariable<GameMode>();
-
-    public BulletColor ActiveColorMode { get => networkGameModeVariable.Value.currentBulletColor; }
-    public BulletSize ActiveSizeMode { get => networkGameModeVariable.Value.currentBulletSize; }
-    
-    [SerializeField] private TMP_Text gameModeText;
-    [SerializeField] private float roundSession = 1f;
-    
-    private void Awake()
+    public class GameModeController : NetworkBehaviour
     {
-        Instance = this;
-        DontDestroyOnLoad(this);
-    }
+        public static GameModeController Instance;
+    
+        private NetworkVariable<GameMode> networkGameModeVariable = new NetworkVariable<GameMode>();
 
-    public override void OnNetworkSpawn()
-    {
-        base.OnNetworkSpawn();
-        
-        networkGameModeVariable.OnValueChanged += OnGameModeChanged;
-        
-        if (IsHost)
+        public BulletColor ActiveColorMode { get => networkGameModeVariable.Value.currentBulletColor; }
+        public BulletSize ActiveSizeMode { get => networkGameModeVariable.Value.currentBulletSize; }
+    
+        [SerializeField] private TMP_Text gameModeText;
+        [SerializeField] private float roundSession = 1f;
+    
+        private void Awake()
         {
-            InvokeRepeating(nameof(SetGameMode), 0, roundSession); 
+            Instance = this;
+            DontDestroyOnLoad(this);
         }
-    }
 
-    public override void OnDestroy()
-    {
-        base.OnDestroy();
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
         
-        networkGameModeVariable.OnValueChanged -= OnGameModeChanged;
-    }
+            networkGameModeVariable.OnValueChanged += OnGameModeChanged;
+        
+            if (IsHost)
+            {
+                InvokeRepeating(nameof(SetGameMode), 0, roundSession); 
+            }
+        }
 
-    private void OnGameModeChanged(GameMode previousValue, GameMode newValue)
-    {
-        if(IsOwner) ChangedGameModeServerRpc(newValue);
-    }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+        
+            networkGameModeVariable.OnValueChanged -= OnGameModeChanged;
+        }
 
-    [ServerRpc]
-    private void ChangedGameModeServerRpc(GameMode gameMode)
-    {
-        UpdateGameModeClientRpc(gameMode);
-    }
+        private void OnGameModeChanged(GameMode previousValue, GameMode newValue)
+        {
+            if(IsOwner) ChangedGameModeServerRpc(newValue);
+        }
 
-    [ClientRpc]
-    private void UpdateGameModeClientRpc(GameMode gameMode)
-    {
-        gameModeText.text = gameMode.currentBulletColor.ToString() + " - " +
-                            gameMode.currentBulletSize.ToString();
-        gameModeText.color = ColorUtils.GetColorWithEnum(gameMode.currentBulletColor);
-    }
+        [ServerRpc]
+        private void ChangedGameModeServerRpc(GameMode gameMode)
+        {
+            UpdateGameModeClientRpc(gameMode);
+        }
+
+        [ClientRpc]
+        private void UpdateGameModeClientRpc(GameMode gameMode)
+        {
+            gameModeText.text = gameMode.currentBulletColor.ToString() + " - " +
+                                gameMode.currentBulletSize.ToString();
+            gameModeText.color = ColorUtils.GetColorWithEnum(gameMode.currentBulletColor);
+        }
     
 
-    private void SetGameMode()
-    {
-        networkGameModeVariable.Value = new GameMode()
+        private void SetGameMode()
         {
-            currentBulletColor = GetRandomColor(),
-            currentBulletSize = GetRandomSize()
-        };
-    }
+            networkGameModeVariable.Value = new GameMode()
+            {
+                currentBulletColor = GetRandomColor(),
+                currentBulletSize = GetRandomSize()
+            };
+        }
 
-    private BulletColor GetRandomColor()
-    {
-        int randomValue = Random.Range(0, 100);
+        private BulletColor GetRandomColor()
+        {
+            int randomValue = Random.Range(0, 100);
      
-        if (randomValue < 33)
-        {
-            return BulletColor.Red;
+            if (randomValue < 33)
+            {
+                return BulletColor.Red;
+            }
+            else if(randomValue < 66)
+            {
+                return BulletColor.Blue;
+            }
+            else
+            {
+                return BulletColor.Green;
+            }
         }
-        else if(randomValue < 66)
-        {
-            return BulletColor.Blue;
-        }
-        else
-        {
-            return BulletColor.Green;
-        }
-    }
     
-    private BulletSize GetRandomSize()
-    {
-        int randomValue = Random.Range(0, 100);
+        private BulletSize GetRandomSize()
+        {
+            int randomValue = Random.Range(0, 100);
      
-        if (randomValue < 33)
-        {
-            return BulletSize.Small;
-        }
-        else if(randomValue < 66)
-        {
-            return BulletSize.Standard;
-        }
-        else
-        {
-            return BulletSize.Large;
+            if (randomValue < 33)
+            {
+                return BulletSize.Small;
+            }
+            else if(randomValue < 66)
+            {
+                return BulletSize.Standard;
+            }
+            else
+            {
+                return BulletSize.Large;
+            }
         }
     }
 }

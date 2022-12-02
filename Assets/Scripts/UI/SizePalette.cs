@@ -1,14 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using Enums;
+using Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SizePalette : MonoBehaviour, IPointerClickHandler
+namespace UI
 {
-    [SerializeField] private BulletSize bulletSize;
-
-    public void OnPointerClick(PointerEventData eventData)
+    public class SizePalette : MonoBehaviour, IPointerClickHandler
     {
-        GlobalEventManager.OnClientBulletSizeChanged.Invoke(bulletSize);
+        [SerializeField] private BulletSize bulletSize;
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            GlobalEventManager.OnClientBulletSizeChanged.Invoke(bulletSize);
+        }
     }
 }

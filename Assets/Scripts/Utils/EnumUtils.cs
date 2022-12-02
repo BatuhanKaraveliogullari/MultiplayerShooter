@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Enums;
 
-public static class EnumUtils
+namespace Utils
 {
-    public static bool IsEqualColor(BulletColor currentEnum, BulletColor otherEnum) => (currentEnum & otherEnum) == otherEnum;
-    public static bool IsEqualColor(BulletSize currentEnum, BulletSize otherEnum) => (currentEnum & otherEnum) == otherEnum;
+    public static class EnumUtils
+    {
+        public static bool IsEqualColor(BulletColor currentEnum, BulletColor otherEnum) => (currentEnum & otherEnum) == otherEnum;
+        public static bool IsEqualColor(BulletSize currentEnum, BulletSize otherEnum) => (currentEnum & otherEnum) == otherEnum;
+    }
 }

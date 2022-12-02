@@ -1,30 +1,31 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Events;
 using UnityEngine;
 
-public class UIInputReader : MonoBehaviour
+namespace UI
 {
-    [SerializeField] private GameObject bulletSelectionPanel;
-    
-    private void Update()
+    public class UIInputReader : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        [SerializeField] private GameObject bulletSelectionPanel;
+    
+        private void Update()
         {
-            bulletSelectionPanel.SetActive(!bulletSelectionPanel.activeInHierarchy);
-            SetCursorState(bulletSelectionPanel.activeInHierarchy);
-            SetSelectionmenuActivity(bulletSelectionPanel.activeInHierarchy);
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                bulletSelectionPanel.SetActive(!bulletSelectionPanel.activeInHierarchy);
+                SetCursorState(bulletSelectionPanel.activeInHierarchy);
+                SetSelectionmenuActivity(bulletSelectionPanel.activeInHierarchy);
+            }
         }
-    }
 
-    private void SetCursorState(bool isActive)
-    {
-        Cursor.visible = isActive;
-        Cursor.lockState = (isActive) ? CursorLockMode.None : CursorLockMode.Locked;
-    }
+        private void SetCursorState(bool isActive)
+        {
+            Cursor.visible = isActive;
+            Cursor.lockState = (isActive) ? CursorLockMode.None : CursorLockMode.Locked;
+        }
     
-    public void SetSelectionmenuActivity(bool isActive)
-    {
-        GlobalEventManager.OnIsSelectionMenuActive.Invoke(isActive);
+        public void SetSelectionmenuActivity(bool isActive)
+        {
+            GlobalEventManager.OnIsSelectionMenuActive.Invoke(isActive);
+        }
     }
 }

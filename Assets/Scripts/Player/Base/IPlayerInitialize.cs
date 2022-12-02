@@ -1,4 +1,7 @@
-public interface IPlayerInitialize : IInitilize<PlayerData>
+namespace Player.Base
 {
+    public interface IPlayerInitialize : IInitilize<PlayerData>
+    {
     
+    }
 }

@@ -1,18 +1,21 @@
 using System;
 using Random = UnityEngine.Random;
 
-public static class StringUtils
+namespace Utils
 {
-    private static string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-
-    public static string GetRandomUserName(int length = 7)
+    public static class StringUtils
     {
-        string tempUsername = String.Empty;
-        for (int i = 0; i < length; i++)
-        {
-            tempUsername += chars[Random.Range(0, chars.Length - 1)];
-        }
+        private static string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 
-        return tempUsername;
+        public static string GetRandomUserName(int length = 7)
+        {
+            string tempUsername = String.Empty;
+            for (int i = 0; i < length; i++)
+            {
+                tempUsername += chars[Random.Range(0, chars.Length - 1)];
+            }
+
+            return tempUsername;
+        }
     }
 }

@@ -1,30 +1,34 @@
-using System;
+using Player.Base;
 using Unity.Netcode;
 using UnityEngine;
+using Utils;
 
-public class PlayerColorController : PlayerController, IColor
+namespace Player
 {
-    private readonly NetworkVariable<Color> netPlayerColor = new();
+    public class PlayerColorController : PlayerController, IColor
+    {
+        private readonly NetworkVariable<Color> netPlayerColor = new();
     
-    [SerializeField] private MeshRenderer playerColor;
-    [SerializeField] private MeshRenderer gunColor;
+        [SerializeField] private MeshRenderer playerColor;
+        [SerializeField] private MeshRenderer gunColor;
 
-    public override void OnNetworkSpawn() 
-    {
-        base.OnNetworkSpawn();
-        
-        if (IsOwner) 
+        public override void OnNetworkSpawn() 
         {
-            RequestColorChangeServerRpc(ColorUtils.GetColorForClient(OwnerClientId));
-        }
+            base.OnNetworkSpawn();
         
-        playerColor.material.color = ColorUtils.GetColorForClient(OwnerClientId);
-        gunColor.material.color = ColorUtils.GetColorForClient(OwnerClientId);  
-    }
+            if (IsOwner) 
+            {
+                RequestColorChangeServerRpc(ColorUtils.GetColorForClient(OwnerClientId));
+            }
+        
+            playerColor.material.color = ColorUtils.GetColorForClient(OwnerClientId);
+            gunColor.material.color = ColorUtils.GetColorForClient(OwnerClientId);  
+        }
     
-    [ServerRpc]
-    public void RequestColorChangeServerRpc(Color color)
-    {
-        netPlayerColor.Value = color;
+        [ServerRpc]
+        public void RequestColorChangeServerRpc(Color color)
+        {
+            netPlayerColor.Value = color;
+        }
     }
 }

@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using Events;
+using Player;
 using Unity.Netcode;
-using UnityEngine;
 
-public class TargetController : NetworkBehaviour
+namespace Probs
 {
-    public void HitTarget(NetworkPlayerData networkPlayerData)
+    public class TargetController : NetworkBehaviour
     {
-        if(!IsOwner) return;
+        public void HitTarget(NetworkPlayerData networkPlayerData)
+        {
+            if(!IsOwner) return;
         
-        GlobalEventManager.OnTargetDestroyed.Invoke(networkPlayerData);
-        GetComponent<NetworkObject>().Despawn();
+            GlobalEventManager.OnTargetDestroyed.Invoke(networkPlayerData);
+            GetComponent<NetworkObject>().Despawn();
+        }
     }
 }

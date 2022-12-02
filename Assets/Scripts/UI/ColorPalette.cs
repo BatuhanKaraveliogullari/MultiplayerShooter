@@ -1,14 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
+using Enums;
+using Events;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ColorPalette : MonoBehaviour, IPointerClickHandler
+namespace UI
 {
-    [SerializeField] private BulletColor bulletColor;
-
-    public void OnPointerClick(PointerEventData eventData)
+    public class ColorPalette : MonoBehaviour, IPointerClickHandler
     {
-        GlobalEventManager.OnClientBulletColorChanged.Invoke(bulletColor);
+        [SerializeField] private BulletColor bulletColor;
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            GlobalEventManager.OnClientBulletColorChanged.Invoke(bulletColor);
+        }
     }
 }

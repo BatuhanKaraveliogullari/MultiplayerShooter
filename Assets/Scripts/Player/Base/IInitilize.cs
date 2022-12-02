@@ -1,4 +1,7 @@
-public interface IInitilize <T>
+namespace Player.Base
 {
-    void Init(T type);
+    public interface IInitilize <T>
+    {
+        void Init(T type);
+    }
 }
